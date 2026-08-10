@@ -15,3 +15,4 @@ class File(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     repository: Mapped["Repository"] = relationship(back_populates="files")
     chunks: Mapped[list["Chunk"]] = relationship(back_populates="file", cascade="all, delete-orphan")
+    security_findings: Mapped[list["SecurityFinding"]] = relationship(back_populates="file", cascade="all, delete-orphan")

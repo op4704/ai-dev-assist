@@ -84,3 +84,20 @@ def delete_repository_vectors(repository_id: int) -> None:
     pc = _get_client()
     index = pc.Index(settings.pinecone_index_name)
     index.delete(filter={"repository_id": repository_id})
+
+
+def delete_vectors_by_ids(vector_ids: list[str]) -> None:
+    """
+    Deletes specific vectors by ID. More reliable than metadata-filtered
+    delete on Pinecone's free/serverless tier, which can restrict filtered
+    deletes. Pinecone caps delete-by-ID batches, so this chunks the list.
+    """
+    if not vector_ids:
+        return
+
+    pc = _get_client()
+    index = pc.Index(settings.pinecone_index_name)
+
+    batch_size = 1000
+    for i in range(0, len(vector_ids), batch_size):
+        index.delete(ids=vector_ids[i : i + batch_size])

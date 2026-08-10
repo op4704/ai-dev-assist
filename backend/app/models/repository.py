@@ -30,3 +30,5 @@ class Repository(Base):
     files: Mapped[list["File"]] = relationship(back_populates="repository", cascade="all, delete-orphan")
     chat_sessions: Mapped[list["ChatSession"]] = relationship(back_populates="repository", cascade="all, delete-orphan")
     agent_logs: Mapped[list["AgentLog"]] = relationship(back_populates="repository", cascade="all, delete-orphan")
+    security_findings: Mapped[list["SecurityFinding"]] = relationship(back_populates="repository", cascade="all, delete-orphan")
+    generated_docs: Mapped[list["GeneratedDoc"]] = relationship(back_populates="repository", cascade="all, delete-orphan")

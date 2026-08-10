@@ -18,6 +18,8 @@ from app.core.config import settings
 from app.core.limiter import limiter
 from app.database.base import Base
 from app.database.session import engine
+from app.api.routes.security import router as security_router
+from app.api.routes.docs import router as docs_router
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -67,6 +69,8 @@ async def unhandled(_: Request, exc: Exception) -> JSONResponse:
 app.include_router(repository_router, prefix="/api")
 app.include_router(repositories_router, prefix="/api")
 app.include_router(rag_router, prefix="/api")
+app.include_router(security_router, prefix="/api")
+app.include_router(docs_router, prefix="/api")
 
 @app.get("/api/health", tags=["health"])
 async def health() -> dict:

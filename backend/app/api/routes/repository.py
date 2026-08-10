@@ -10,6 +10,7 @@ from app.models import File as FileModel, Repository, RepositoryStatus
 from app.schemas.repository import FileResponse, RepositoryImportRequest, RepositoryProcessRequest, RepositoryResponse
 from app.services.file_filter_service import walk_and_filter
 from app.services.github_service import GitHubServiceError, clone_repository, parse_github_url
+from app.services.repository_delete_service import delete_repository
 
 router = APIRouter(prefix="/repository", tags=["repository"])
 repositories_router = APIRouter(tags=["repository"])
@@ -65,6 +66,19 @@ async def process_repository(payload: RepositoryProcessRequest, db: AsyncSession
         await db.commit()
         raise HTTPException(status_code=500, detail=f"Processing failed: {exc}") from exc
     return repo
+
+@router.delete("/{repository_id}", status_code=204)
+async def delete_repository_route(
+    repository_id: int,
+    db: AsyncSession = Depends(get_db),
+    user_id: int = Depends(get_current_user_id),
+):
+    repo = await _get_repo(db, repository_id, user_id)
+
+    try:
+        await delete_repository(db, repo)
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Delete failed: {exc}") from exc
 
 
 @router.get("/{repository_id}/files", response_model=list[FileResponse])
