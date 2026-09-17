@@ -39,18 +39,21 @@ Real integration tests — they clone an actual public GitHub repo over the netw
 ## Project structure
 
 ```
-ai-dev-assistant/
+ai-dev-assist/
 ├── backend/            FastAPI app + SQLAlchemy models + services
 │   └── app/main.py     mounts frontend/ as static files AFTER /api routes
-└── frontend/           Vanilla HTML/CSS/JS — no build step, no framework
-    ├── index.html      SPA shell
-    ├── css/style.css   ← edit this to re-theme the whole app
-    ├── js/api/client.js       the only file that calls the backend
-    ├── js/templates/           reusable UI pieces (sidebar, badges, etc.)
-    └── js/pages/                one file per route (dashboard, import, repo detail)
+└── frontend/
+    ├── index.html       Marketing landing page, served at /
+    ├── css/, js/         landing page assets
+    └── app/              The actual SPA, served at /app/ — vanilla JS, no build step
+        ├── index.html
+        ├── css/style.css   ← edit this to re-theme the whole app
+        ├── js/api/client.js       the only file that calls the backend
+        ├── js/templates/           reusable UI pieces (sidebar, badges, etc.)
+        └── js/pages/                one file per route (dashboard, import, chat, repo detail)
 ```
 
-**Want to change the UI?** See [`frontend/TEMPLATES.md`](frontend/TEMPLATES.md) — it explains exactly which file to edit for every kind of change, from re-theming to adding whole new pages, without touching backend code.
+**Want to change the UI?** See [`frontend/app/TEMPLATES.md`](frontend/app/TEMPLATES.md) — it explains exactly which file to edit for every kind of change, from re-theming to adding whole new pages, without touching backend code.
 
 ## Documentation
 
